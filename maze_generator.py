@@ -1,25 +1,24 @@
-# Maze generator 
+import os
+import random
 
-import random 
+class Maze:
+    def __init__(self, size):
+        self.size = size
+        self.maze = [['#' for _ in range(size)] for _ in range(size)]
+        self.generate_maze()
 
-def generate_maze(n):
-    maze = [['#' for i in range(n)] for j in range(n)]
-    for i in range(n):
-        for j in range(n):
-            if random.choice([True, False]):
-                maze[i][j] = '.'
-    maze[0][0] = '.'
-    maze[n-1][n-1] = '.'
-    return maze
+    def generate_maze(self):
+        for i in range(self.size):
+            for j in range(self.size):
+                if random.choice([True, False]):
+                    self.maze[i][j] = '.'
+        self.maze[0][0] = '.'  # Entrée
+        self.maze[self.size-1][self.size-1] = '.'  # Sortie
 
-def save_maze(maze, filename):
-    with open(filename, 'w') as f:
-        for row in maze:
-            f.write(''.join(row) + '\n')
-
-if __name__ == '__main__':
-    n = int(input('Enter the size of the maze: '))
-    filename = input('Enter the filename to save the maze: ')
-    maze = generate_maze(n)
-    save_maze(maze, filename)
-    print('Maze saved to', filename)
+    def save_maze(self, filename):
+        if not os.path.exists('mazes'):
+            os.makedirs('mazes')
+        filepath = os.path.join('mazes', filename)
+        with open(filepath, 'w') as f:
+            for row in self.maze:
+                f.write(''.join(row) + '\n')
