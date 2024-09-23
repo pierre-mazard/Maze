@@ -12,8 +12,8 @@ class Maze:
             for j in range(self.size):
                 if random.choice([True, False]):
                     self.maze[i][j] = '.'
-        self.maze[0][0] = '.'  # Entrée
-        self.maze[self.size-1][self.size-1] = '.'  # Sortie
+        self.maze[0][0] = '.'  
+        self.maze[self.size-1][self.size-1] = '.'  
 
     def save_maze(self, filename):
         if not os.path.exists('mazes'):
