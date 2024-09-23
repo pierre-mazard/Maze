@@ -24,8 +24,10 @@ def save_maze(maze, filename):
             f.write(''.join(row) + '\n')
 
 def create_maze():
-    n = int(entry.get())
-    filename = f"maze_{n}x{n}.txt"  # Nom de fichier automatique basé sur la taille du labyrinthe
+    n = int(entry_size.get())
+    filename = entry_filename.get()
+    if not filename.endswith(".txt"):
+        filename += ".txt"
     maze = generate_maze(n)
     save_maze(maze, filename)
     messagebox.showinfo("Succès", f"Labyrinthe sauvegardé dans le fichier mazes/{filename}")
@@ -41,8 +43,12 @@ app = tk.Tk()
 app.title("Générateur de Labyrinthe")
 
 tk.Label(app, text="Taille du labyrinthe (n):").pack()
-entry = tk.Entry(app)
-entry.pack()
+entry_size = tk.Entry(app)
+entry_size.pack()
+
+tk.Label(app, text="Nom du fichier:").pack()
+entry_filename = tk.Entry(app)
+entry_filename.pack()
 
 tk.Button(app, text="Créer Labyrinthe", command=create_maze).pack()
 tk.Button(app, text="Ouvrir Labyrinthe", command=open_maze).pack()
