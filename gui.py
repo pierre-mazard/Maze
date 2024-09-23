@@ -10,7 +10,7 @@ class MazeApp:
         self.create_widgets()
 
     def create_widgets(self):
-        tk.Label(self.root, text="Maze size (n*n):").pack()
+        tk.Label(self.root, text="Maze size (n*n, n > 0):").pack()
         self.entry_size = tk.Entry(self.root)
         self.entry_size.pack()
 
@@ -22,10 +22,23 @@ class MazeApp:
         tk.Button(self.root, text="Open existing maze ", command=self.open_maze).pack()
 
     def create_maze(self):
-        n = int(self.entry_size.get())
+        try:
+            n = int(self.entry_size.get())
+            if n <= 0:
+                messagebox.showerror("Error", "Please enter a positive integer for the maze size.")
+                return
+        except ValueError:
+            messagebox.showerror("Error", "Please enter a valid integer for the maze size.")
+            return
+
         filename = self.entry_filename.get()
+        if not filename:
+            messagebox.showerror("Error", "Please enter a name for the maze file.")
+            return
+
         if not filename.endswith(".txt"):
             filename += ".txt"
+
         maze = Maze(n)
         maze.save_maze(filename)
         messagebox.showinfo("Success", f"Maze saved in the file mazes/{filename}")
