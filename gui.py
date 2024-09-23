@@ -5,29 +5,43 @@ from maze_generator import Maze
 class MazeApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Générateur de Labyrinthe")
+        self.root.title("Simple Maze Generator")
+        self.root.geometry("400x300")
         self.create_widgets()
 
     def create_widgets(self):
-        tk.Label(self.root, text="Taille du labyrinthe (n):").pack()
+        tk.Label(self.root, text="Maze size (n*n, n > 0):").pack()
         self.entry_size = tk.Entry(self.root)
         self.entry_size.pack()
 
-        tk.Label(self.root, text="Nom du fichier:").pack()
+        tk.Label(self.root, text="Maze name:").pack()
         self.entry_filename = tk.Entry(self.root)
         self.entry_filename.pack()
 
-        tk.Button(self.root, text="Créer Labyrinthe", command=self.create_maze).pack()
-        tk.Button(self.root, text="Ouvrir Labyrinthe", command=self.open_maze).pack()
+        tk.Button(self.root, text="Creatig maze", command=self.create_maze).pack()
+        tk.Button(self.root, text="Open existing maze ", command=self.open_maze).pack()
 
     def create_maze(self):
-        n = int(self.entry_size.get())
+        try:
+            n = int(self.entry_size.get())
+            if n <= 0:
+                messagebox.showerror("Error", "Please enter a positive integer for the maze size.")
+                return
+        except ValueError:
+            messagebox.showerror("Error", "Please enter a valid integer for the maze size.")
+            return
+
         filename = self.entry_filename.get()
+        if not filename:
+            messagebox.showerror("Error", "Please enter a name for the maze file.")
+            return
+
         if not filename.endswith(".txt"):
             filename += ".txt"
+
         maze = Maze(n)
         maze.save_maze(filename)
-        messagebox.showinfo("Succès", f"Labyrinthe sauvegardé dans le fichier mazes/{filename}")
+        messagebox.showinfo("Success", f"Maze saved in the file mazes/{filename}")
 
     def open_maze(self):
         filename = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")], initialdir='mazes')
